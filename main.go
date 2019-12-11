@@ -6,21 +6,22 @@ import (
 
 	"github.com/buaazp/fasthttprouter"
 	"github.com/valyala/fasthttp"
-	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/confus1on/mbeledos/config"
+	"github.com/confus1on/mbeledos/ent"
+	_ "github.com/lib/pq"
 
 	// route package
-	"github.com/confus1on/mbeledos/user/handler"
-	"github.com/confus1on/mbeledos/user/repository"
-	"github.com/confus1on/mbeledos/user/usecase"
+	"github.com/confus1on/mbeledos/userservice/handler"
+	"github.com/confus1on/mbeledos/userservice/repository"
+	"github.com/confus1on/mbeledos/userservice/usecase"
 )
 
 func Hello(ctx *fasthttp.RequestCtx) {
 	fmt.Fprint(ctx, "Hello World")
 }
 
-var DB *mongo.Database
+var DB *ent.Client
 
 func main() {
 
@@ -28,10 +29,11 @@ func main() {
 	router := fasthttprouter.New()
 
 	// call new config database
-	DB := config.New()
+	DB = config.New()
+	defer DB.Close()
 
 	// initalize route
-	mongoUserRepository := repository.NewMongoUserRepository(DB)
+	mongoUserRepository := repository.NewPostgreSQLUserRepository(DB)
 	userUsecase := usecase.NewUserUsercase(mongoUserRepository)
 	user := handler.NewUserHandler(userUsecase)
 
