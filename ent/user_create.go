@@ -4,6 +4,8 @@ package ent
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	"github.com/confus1on/mbeledos/ent/user"
 	"github.com/facebookincubator/ent/dialect/sql"
@@ -12,10 +14,13 @@ import (
 // UserCreate is the builder for creating a User entity.
 type UserCreate struct {
 	config
-	nohp      *string
-	nama      *string
-	tgl_lahir *string
-	alamat    *string
+	nohp           *string
+	nama           *string
+	tgl_lahir      *string
+	alamat         *string
+	level          *int
+	image          *string
+	kategori_level *string
 }
 
 // SetNohp sets the nohp field.
@@ -74,6 +79,40 @@ func (uc *UserCreate) SetNillableAlamat(s *string) *UserCreate {
 	return uc
 }
 
+// SetLevel sets the level field.
+func (uc *UserCreate) SetLevel(i int) *UserCreate {
+	uc.level = &i
+	return uc
+}
+
+// SetImage sets the image field.
+func (uc *UserCreate) SetImage(s string) *UserCreate {
+	uc.image = &s
+	return uc
+}
+
+// SetNillableImage sets the image field if the given value is not nil.
+func (uc *UserCreate) SetNillableImage(s *string) *UserCreate {
+	if s != nil {
+		uc.SetImage(*s)
+	}
+	return uc
+}
+
+// SetKategoriLevel sets the kategori_level field.
+func (uc *UserCreate) SetKategoriLevel(s string) *UserCreate {
+	uc.kategori_level = &s
+	return uc
+}
+
+// SetNillableKategoriLevel sets the kategori_level field if the given value is not nil.
+func (uc *UserCreate) SetNillableKategoriLevel(s *string) *UserCreate {
+	if s != nil {
+		uc.SetKategoriLevel(*s)
+	}
+	return uc
+}
+
 // Save creates the User in the database.
 func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
 	if uc.nohp == nil {
@@ -91,6 +130,20 @@ func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
 	if uc.alamat == nil {
 		v := user.DefaultAlamat
 		uc.alamat = &v
+	}
+	if uc.level == nil {
+		return nil, errors.New("ent: missing required field \"level\"")
+	}
+	if err := user.LevelValidator(*uc.level); err != nil {
+		return nil, fmt.Errorf("ent: validator failed for field \"level\": %v", err)
+	}
+	if uc.image == nil {
+		v := user.DefaultImage
+		uc.image = &v
+	}
+	if uc.kategori_level == nil {
+		v := user.DefaultKategoriLevel
+		uc.kategori_level = &v
 	}
 	return uc.sqlSave(ctx)
 }
@@ -129,6 +182,18 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 	if value := uc.alamat; value != nil {
 		insert.Set(user.FieldAlamat, *value)
 		u.Alamat = *value
+	}
+	if value := uc.level; value != nil {
+		insert.Set(user.FieldLevel, *value)
+		u.Level = *value
+	}
+	if value := uc.image; value != nil {
+		insert.Set(user.FieldImage, *value)
+		u.Image = *value
+	}
+	if value := uc.kategori_level; value != nil {
+		insert.Set(user.FieldKategoriLevel, *value)
+		u.KategoriLevel = *value
 	}
 
 	id, err := insertLastID(ctx, tx, insert.Returning(user.FieldID))

@@ -144,6 +144,33 @@ func Alamat(v string) predicate.User {
 	)
 }
 
+// Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
+func Level(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// Image applies equality check predicate on the "image" field. It's identical to ImageEQ.
+func Image(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldImage), v))
+		},
+	)
+}
+
+// KategoriLevel applies equality check predicate on the "kategori_level" field. It's identical to KategoriLevelEQ.
+func KategoriLevel(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
 // NohpEQ applies the EQ predicate on the "nohp" field.
 func NohpEQ(v string) predicate.User {
 	return predicate.User(
@@ -688,6 +715,372 @@ func AlamatContainsFold(v string) predicate.User {
 	return predicate.User(
 		func(s *sql.Selector) {
 			s.Where(sql.ContainsFold(s.C(FieldAlamat), v))
+		},
+	)
+}
+
+// LevelEQ applies the EQ predicate on the "level" field.
+func LevelEQ(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// LevelNEQ applies the NEQ predicate on the "level" field.
+func LevelNEQ(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.NEQ(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// LevelIn applies the In predicate on the "level" field.
+func LevelIn(vs ...int) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.In(s.C(FieldLevel), v...))
+		},
+	)
+}
+
+// LevelNotIn applies the NotIn predicate on the "level" field.
+func LevelNotIn(vs ...int) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.NotIn(s.C(FieldLevel), v...))
+		},
+	)
+}
+
+// LevelGT applies the GT predicate on the "level" field.
+func LevelGT(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GT(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// LevelGTE applies the GTE predicate on the "level" field.
+func LevelGTE(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GTE(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// LevelLT applies the LT predicate on the "level" field.
+func LevelLT(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LT(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// LevelLTE applies the LTE predicate on the "level" field.
+func LevelLTE(v int) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LTE(s.C(FieldLevel), v))
+		},
+	)
+}
+
+// ImageEQ applies the EQ predicate on the "image" field.
+func ImageEQ(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageNEQ applies the NEQ predicate on the "image" field.
+func ImageNEQ(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.NEQ(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageIn applies the In predicate on the "image" field.
+func ImageIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.In(s.C(FieldImage), v...))
+		},
+	)
+}
+
+// ImageNotIn applies the NotIn predicate on the "image" field.
+func ImageNotIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.NotIn(s.C(FieldImage), v...))
+		},
+	)
+}
+
+// ImageGT applies the GT predicate on the "image" field.
+func ImageGT(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GT(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageGTE applies the GTE predicate on the "image" field.
+func ImageGTE(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GTE(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageLT applies the LT predicate on the "image" field.
+func ImageLT(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LT(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageLTE applies the LTE predicate on the "image" field.
+func ImageLTE(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LTE(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageContains applies the Contains predicate on the "image" field.
+func ImageContains(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.Contains(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageHasPrefix applies the HasPrefix predicate on the "image" field.
+func ImageHasPrefix(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.HasPrefix(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageHasSuffix applies the HasSuffix predicate on the "image" field.
+func ImageHasSuffix(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.HasSuffix(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageEqualFold applies the EqualFold predicate on the "image" field.
+func ImageEqualFold(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EqualFold(s.C(FieldImage), v))
+		},
+	)
+}
+
+// ImageContainsFold applies the ContainsFold predicate on the "image" field.
+func ImageContainsFold(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.ContainsFold(s.C(FieldImage), v))
+		},
+	)
+}
+
+// KategoriLevelEQ applies the EQ predicate on the "kategori_level" field.
+func KategoriLevelEQ(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelNEQ applies the NEQ predicate on the "kategori_level" field.
+func KategoriLevelNEQ(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.NEQ(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelIn applies the In predicate on the "kategori_level" field.
+func KategoriLevelIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.In(s.C(FieldKategoriLevel), v...))
+		},
+	)
+}
+
+// KategoriLevelNotIn applies the NotIn predicate on the "kategori_level" field.
+func KategoriLevelNotIn(vs ...string) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.NotIn(s.C(FieldKategoriLevel), v...))
+		},
+	)
+}
+
+// KategoriLevelGT applies the GT predicate on the "kategori_level" field.
+func KategoriLevelGT(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GT(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelGTE applies the GTE predicate on the "kategori_level" field.
+func KategoriLevelGTE(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.GTE(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelLT applies the LT predicate on the "kategori_level" field.
+func KategoriLevelLT(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LT(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelLTE applies the LTE predicate on the "kategori_level" field.
+func KategoriLevelLTE(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.LTE(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelContains applies the Contains predicate on the "kategori_level" field.
+func KategoriLevelContains(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.Contains(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelHasPrefix applies the HasPrefix predicate on the "kategori_level" field.
+func KategoriLevelHasPrefix(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.HasPrefix(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelHasSuffix applies the HasSuffix predicate on the "kategori_level" field.
+func KategoriLevelHasSuffix(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.HasSuffix(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelEqualFold applies the EqualFold predicate on the "kategori_level" field.
+func KategoriLevelEqualFold(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.EqualFold(s.C(FieldKategoriLevel), v))
+		},
+	)
+}
+
+// KategoriLevelContainsFold applies the ContainsFold predicate on the "kategori_level" field.
+func KategoriLevelContainsFold(v string) predicate.User {
+	return predicate.User(
+		func(s *sql.Selector) {
+			s.Where(sql.ContainsFold(s.C(FieldKategoriLevel), v))
 		},
 	)
 }

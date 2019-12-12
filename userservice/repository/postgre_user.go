@@ -39,6 +39,9 @@ func (ur *PostgreSQLUserRepository) Register(ctx context.Context, user *ent.User
 		SetNama(user.Nama).
 		SetTglLahir(user.TglLahir).
 		SetAlamat(user.Alamat).
+		SetLevel(user.Level).
+		SetImage(user.Image).
+		SetKategoriLevel(user.KategoriLevel).
 		Save(ctx)
 
 	if err != nil {

@@ -22,16 +22,25 @@ type User struct {
 	TglLahir string `json:"tgl_lahir,omitempty"`
 	// Alamat holds the value of the "alamat" field.
 	Alamat string `json:"alamat,omitempty"`
+	// Level holds the value of the "level" field.
+	Level int `json:"level,omitempty"`
+	// Image holds the value of the "image" field.
+	Image string `json:"image,omitempty"`
+	// KategoriLevel holds the value of the "kategori_level" field.
+	KategoriLevel string `json:"kategori_level,omitempty"`
 }
 
 // FromRows scans the sql response data into User.
 func (u *User) FromRows(rows *sql.Rows) error {
 	var scanu struct {
-		ID       int
-		Nohp     sql.NullString
-		Nama     sql.NullString
-		TglLahir sql.NullString
-		Alamat   sql.NullString
+		ID            int
+		Nohp          sql.NullString
+		Nama          sql.NullString
+		TglLahir      sql.NullString
+		Alamat        sql.NullString
+		Level         sql.NullInt64
+		Image         sql.NullString
+		KategoriLevel sql.NullString
 	}
 	// the order here should be the same as in the `user.Columns`.
 	if err := rows.Scan(
@@ -40,6 +49,9 @@ func (u *User) FromRows(rows *sql.Rows) error {
 		&scanu.Nama,
 		&scanu.TglLahir,
 		&scanu.Alamat,
+		&scanu.Level,
+		&scanu.Image,
+		&scanu.KategoriLevel,
 	); err != nil {
 		return err
 	}
@@ -48,6 +60,9 @@ func (u *User) FromRows(rows *sql.Rows) error {
 	u.Nama = scanu.Nama.String
 	u.TglLahir = scanu.TglLahir.String
 	u.Alamat = scanu.Alamat.String
+	u.Level = int(scanu.Level.Int64)
+	u.Image = scanu.Image.String
+	u.KategoriLevel = scanu.KategoriLevel.String
 	return nil
 }
 
@@ -82,6 +97,12 @@ func (u *User) String() string {
 	builder.WriteString(u.TglLahir)
 	builder.WriteString(", alamat=")
 	builder.WriteString(u.Alamat)
+	builder.WriteString(", level=")
+	builder.WriteString(fmt.Sprintf("%v", u.Level))
+	builder.WriteString(", image=")
+	builder.WriteString(u.Image)
+	builder.WriteString(", kategori_level=")
+	builder.WriteString(u.KategoriLevel)
 	builder.WriteByte(')')
 	return builder.String()
 }

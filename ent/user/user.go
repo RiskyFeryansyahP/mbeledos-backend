@@ -19,6 +19,12 @@ const (
 	FieldTglLahir = "tgl_lahir"
 	// FieldAlamat holds the string denoting the alamat vertex property in the database.
 	FieldAlamat = "alamat"
+	// FieldLevel holds the string denoting the level vertex property in the database.
+	FieldLevel = "level"
+	// FieldImage holds the string denoting the image vertex property in the database.
+	FieldImage = "image"
+	// FieldKategoriLevel holds the string denoting the kategori_level vertex property in the database.
+	FieldKategoriLevel = "kategori_level"
 
 	// Table holds the table name of the user in the database.
 	Table = "users"
@@ -31,6 +37,9 @@ var Columns = []string{
 	FieldNama,
 	FieldTglLahir,
 	FieldAlamat,
+	FieldLevel,
+	FieldImage,
+	FieldKategoriLevel,
 }
 
 var (
@@ -55,4 +64,19 @@ var (
 	descAlamat = fields[3].Descriptor()
 	// DefaultAlamat holds the default value on creation for the alamat field.
 	DefaultAlamat = descAlamat.Default.(string)
+
+	// descLevel is the schema descriptor for level field.
+	descLevel = fields[4].Descriptor()
+	// LevelValidator is a validator for the "level" field. It is called by the builders before save.
+	LevelValidator = descLevel.Validators[0].(func(int) error)
+
+	// descImage is the schema descriptor for image field.
+	descImage = fields[5].Descriptor()
+	// DefaultImage holds the default value on creation for the image field.
+	DefaultImage = descImage.Default.(string)
+
+	// descKategoriLevel is the schema descriptor for kategori_level field.
+	descKategoriLevel = fields[6].Descriptor()
+	// DefaultKategoriLevel holds the default value on creation for the kategori_level field.
+	DefaultKategoriLevel = descKategoriLevel.Default.(string)
 )

@@ -21,6 +21,12 @@ func (User) Fields() []ent.Field {
 			Default("00-00-00"),
 		field.String("alamat").
 			Default("Unknown"),
+		field.Int("level").
+			Positive(),
+		field.String("image").
+			Default(""),
+		field.String("kategori_level").
+			Default("pemula"),
 	}
 }
 

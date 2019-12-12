@@ -14,11 +14,15 @@ import (
 // UserUpdate is the builder for updating User entities.
 type UserUpdate struct {
 	config
-	nohp       *string
-	nama       *string
-	tgl_lahir  *string
-	alamat     *string
-	predicates []predicate.User
+	nohp           *string
+	nama           *string
+	tgl_lahir      *string
+	alamat         *string
+	level          *int
+	addlevel       *int
+	image          *string
+	kategori_level *string
+	predicates     []predicate.User
 }
 
 // Where adds a new predicate for the builder.
@@ -83,8 +87,58 @@ func (uu *UserUpdate) SetNillableAlamat(s *string) *UserUpdate {
 	return uu
 }
 
+// SetLevel sets the level field.
+func (uu *UserUpdate) SetLevel(i int) *UserUpdate {
+	uu.level = &i
+	uu.addlevel = nil
+	return uu
+}
+
+// AddLevel adds i to level.
+func (uu *UserUpdate) AddLevel(i int) *UserUpdate {
+	if uu.addlevel == nil {
+		uu.addlevel = &i
+	} else {
+		*uu.addlevel += i
+	}
+	return uu
+}
+
+// SetImage sets the image field.
+func (uu *UserUpdate) SetImage(s string) *UserUpdate {
+	uu.image = &s
+	return uu
+}
+
+// SetNillableImage sets the image field if the given value is not nil.
+func (uu *UserUpdate) SetNillableImage(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetImage(*s)
+	}
+	return uu
+}
+
+// SetKategoriLevel sets the kategori_level field.
+func (uu *UserUpdate) SetKategoriLevel(s string) *UserUpdate {
+	uu.kategori_level = &s
+	return uu
+}
+
+// SetNillableKategoriLevel sets the kategori_level field if the given value is not nil.
+func (uu *UserUpdate) SetNillableKategoriLevel(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetKategoriLevel(*s)
+	}
+	return uu
+}
+
 // Save executes the query and returns the number of rows/vertices matched by this operation.
 func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
+	if uu.level != nil {
+		if err := user.LevelValidator(*uu.level); err != nil {
+			return 0, fmt.Errorf("ent: validator failed for field \"level\": %v", err)
+		}
+	}
 	return uu.sqlSave(ctx)
 }
 
@@ -158,6 +212,18 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value := uu.alamat; value != nil {
 		updater.Set(user.FieldAlamat, *value)
 	}
+	if value := uu.level; value != nil {
+		updater.Set(user.FieldLevel, *value)
+	}
+	if value := uu.addlevel; value != nil {
+		updater.Add(user.FieldLevel, *value)
+	}
+	if value := uu.image; value != nil {
+		updater.Set(user.FieldImage, *value)
+	}
+	if value := uu.kategori_level; value != nil {
+		updater.Set(user.FieldKategoriLevel, *value)
+	}
 	if !updater.Empty() {
 		query, args := updater.Query()
 		if err := tx.Exec(ctx, query, args, &res); err != nil {
@@ -173,11 +239,15 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // UserUpdateOne is the builder for updating a single User entity.
 type UserUpdateOne struct {
 	config
-	id        int
-	nohp      *string
-	nama      *string
-	tgl_lahir *string
-	alamat    *string
+	id             int
+	nohp           *string
+	nama           *string
+	tgl_lahir      *string
+	alamat         *string
+	level          *int
+	addlevel       *int
+	image          *string
+	kategori_level *string
 }
 
 // SetNohp sets the nohp field.
@@ -236,8 +306,58 @@ func (uuo *UserUpdateOne) SetNillableAlamat(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// SetLevel sets the level field.
+func (uuo *UserUpdateOne) SetLevel(i int) *UserUpdateOne {
+	uuo.level = &i
+	uuo.addlevel = nil
+	return uuo
+}
+
+// AddLevel adds i to level.
+func (uuo *UserUpdateOne) AddLevel(i int) *UserUpdateOne {
+	if uuo.addlevel == nil {
+		uuo.addlevel = &i
+	} else {
+		*uuo.addlevel += i
+	}
+	return uuo
+}
+
+// SetImage sets the image field.
+func (uuo *UserUpdateOne) SetImage(s string) *UserUpdateOne {
+	uuo.image = &s
+	return uuo
+}
+
+// SetNillableImage sets the image field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableImage(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetImage(*s)
+	}
+	return uuo
+}
+
+// SetKategoriLevel sets the kategori_level field.
+func (uuo *UserUpdateOne) SetKategoriLevel(s string) *UserUpdateOne {
+	uuo.kategori_level = &s
+	return uuo
+}
+
+// SetNillableKategoriLevel sets the kategori_level field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableKategoriLevel(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetKategoriLevel(*s)
+	}
+	return uuo
+}
+
 // Save executes the query and returns the updated entity.
 func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
+	if uuo.level != nil {
+		if err := user.LevelValidator(*uuo.level); err != nil {
+			return nil, fmt.Errorf("ent: validator failed for field \"level\": %v", err)
+		}
+	}
 	return uuo.sqlSave(ctx)
 }
 
@@ -317,6 +437,22 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (u *User, err error) {
 	if value := uuo.alamat; value != nil {
 		updater.Set(user.FieldAlamat, *value)
 		u.Alamat = *value
+	}
+	if value := uuo.level; value != nil {
+		updater.Set(user.FieldLevel, *value)
+		u.Level = *value
+	}
+	if value := uuo.addlevel; value != nil {
+		updater.Add(user.FieldLevel, *value)
+		u.Level += *value
+	}
+	if value := uuo.image; value != nil {
+		updater.Set(user.FieldImage, *value)
+		u.Image = *value
+	}
+	if value := uuo.kategori_level; value != nil {
+		updater.Set(user.FieldKategoriLevel, *value)
+		u.KategoriLevel = *value
 	}
 	if !updater.Empty() {
 		query, args := updater.Query()

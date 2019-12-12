@@ -17,6 +17,9 @@ var (
 		{Name: "nama", Type: field.TypeString, Default: user.DefaultNama},
 		{Name: "tgl_lahir", Type: field.TypeString, Default: user.DefaultTglLahir},
 		{Name: "alamat", Type: field.TypeString, Default: user.DefaultAlamat},
+		{Name: "level", Type: field.TypeInt},
+		{Name: "image", Type: field.TypeString, Default: user.DefaultImage},
+		{Name: "kategori_level", Type: field.TypeString, Default: user.DefaultKategoriLevel},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
