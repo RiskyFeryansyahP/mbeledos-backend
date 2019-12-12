@@ -35,6 +35,9 @@ func ExampleUser() {
 		SetNama("string").
 		SetTglLahir("string").
 		SetAlamat("string").
+		SetLevel(1).
+		SetImage("string").
+		SetKategoriLevel("string").
 		SaveX(ctx)
 	log.Println("user created:", u)
 
