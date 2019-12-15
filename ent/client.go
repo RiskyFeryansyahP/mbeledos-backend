@@ -9,6 +9,7 @@ import (
 
 	"github.com/confus1on/mbeledos/ent/migrate"
 
+	"github.com/confus1on/mbeledos/ent/bengkel"
 	"github.com/confus1on/mbeledos/ent/user"
 
 	"github.com/facebookincubator/ent/dialect"
@@ -20,6 +21,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// Bengkel is the client for interacting with the Bengkel builders.
+	Bengkel *BengkelClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -29,9 +32,10 @@ func NewClient(opts ...Option) *Client {
 	c := config{log: log.Println}
 	c.options(opts...)
 	return &Client{
-		config: c,
-		Schema: migrate.NewSchema(c.driver),
-		User:   NewUserClient(c),
+		config:  c,
+		Schema:  migrate.NewSchema(c.driver),
+		Bengkel: NewBengkelClient(c),
+		User:    NewUserClient(c),
 	}
 }
 
@@ -63,15 +67,16 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	}
 	cfg := config{driver: tx, log: c.log, debug: c.debug}
 	return &Tx{
-		config: cfg,
-		User:   NewUserClient(cfg),
+		config:  cfg,
+		Bengkel: NewBengkelClient(cfg),
+		User:    NewUserClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		User.
+//		Bengkel.
 //		Query().
 //		Count(ctx)
 //
@@ -81,15 +86,80 @@ func (c *Client) Debug() *Client {
 	}
 	cfg := config{driver: dialect.Debug(c.driver, c.log), log: c.log, debug: true}
 	return &Client{
-		config: cfg,
-		Schema: migrate.NewSchema(cfg.driver),
-		User:   NewUserClient(cfg),
+		config:  cfg,
+		Schema:  migrate.NewSchema(cfg.driver),
+		Bengkel: NewBengkelClient(cfg),
+		User:    NewUserClient(cfg),
 	}
 }
 
 // Close closes the database connection and prevents new queries from starting.
 func (c *Client) Close() error {
 	return c.driver.Close()
+}
+
+// BengkelClient is a client for the Bengkel schema.
+type BengkelClient struct {
+	config
+}
+
+// NewBengkelClient returns a client for the Bengkel from the given config.
+func NewBengkelClient(c config) *BengkelClient {
+	return &BengkelClient{config: c}
+}
+
+// Create returns a create builder for Bengkel.
+func (c *BengkelClient) Create() *BengkelCreate {
+	return &BengkelCreate{config: c.config}
+}
+
+// Update returns an update builder for Bengkel.
+func (c *BengkelClient) Update() *BengkelUpdate {
+	return &BengkelUpdate{config: c.config}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BengkelClient) UpdateOne(b *Bengkel) *BengkelUpdateOne {
+	return c.UpdateOneID(b.ID)
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BengkelClient) UpdateOneID(id int) *BengkelUpdateOne {
+	return &BengkelUpdateOne{config: c.config, id: id}
+}
+
+// Delete returns a delete builder for Bengkel.
+func (c *BengkelClient) Delete() *BengkelDelete {
+	return &BengkelDelete{config: c.config}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *BengkelClient) DeleteOne(b *Bengkel) *BengkelDeleteOne {
+	return c.DeleteOneID(b.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *BengkelClient) DeleteOneID(id int) *BengkelDeleteOne {
+	return &BengkelDeleteOne{c.Delete().Where(bengkel.ID(id))}
+}
+
+// Create returns a query builder for Bengkel.
+func (c *BengkelClient) Query() *BengkelQuery {
+	return &BengkelQuery{config: c.config}
+}
+
+// Get returns a Bengkel entity by its id.
+func (c *BengkelClient) Get(ctx context.Context, id int) (*Bengkel, error) {
+	return c.Query().Where(bengkel.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BengkelClient) GetX(ctx context.Context, id int) *Bengkel {
+	b, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return b
 }
 
 // UserClient is a client for the User schema.

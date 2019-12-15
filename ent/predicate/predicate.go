@@ -6,5 +6,8 @@ import (
 	"github.com/facebookincubator/ent/dialect/sql"
 )
 
+// Bengkel is the predicate function for bengkel builders.
+type Bengkel func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

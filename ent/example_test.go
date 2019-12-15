@@ -15,6 +15,34 @@ import (
 //
 var dsn string
 
+func ExampleBengkel() {
+	if dsn == "" {
+		return
+	}
+	ctx := context.Background()
+	drv, err := sql.Open("mysql", dsn)
+	if err != nil {
+		log.Fatalf("failed creating database client: %v", err)
+	}
+	defer drv.Close()
+	client := NewClient(Driver(drv))
+	// creating vertices for the bengkel's edges.
+
+	// create bengkel vertex with its edges.
+	b := client.Bengkel.
+		Create().
+		SetKodeBengkel("string").
+		SetNamaBengkel("string").
+		SetAlamatBengkel("string").
+		SetLatitude(1).
+		SetLongitude(1).
+		SaveX(ctx)
+	log.Println("bengkel created:", b)
+
+	// query edges.
+
+	// Output:
+}
 func ExampleUser() {
 	if dsn == "" {
 		return

@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"github.com/confus1on/mbeledos/ent/bengkel"
 	"github.com/confus1on/mbeledos/ent/user"
 
 	"github.com/facebookincubator/ent/dialect/sql/schema"
@@ -10,6 +11,22 @@ import (
 )
 
 var (
+	// BengkelsColumns holds the columns for the "bengkels" table.
+	BengkelsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "kode_bengkel", Type: field.TypeString, Unique: true},
+		{Name: "nama_bengkel", Type: field.TypeString, Default: bengkel.DefaultNamaBengkel},
+		{Name: "alamat_bengkel", Type: field.TypeString},
+		{Name: "latitude", Type: field.TypeFloat64},
+		{Name: "longitude", Type: field.TypeFloat64},
+	}
+	// BengkelsTable holds the schema information for the "bengkels" table.
+	BengkelsTable = &schema.Table{
+		Name:        "bengkels",
+		Columns:     BengkelsColumns,
+		PrimaryKey:  []*schema.Column{BengkelsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -30,6 +47,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		BengkelsTable,
 		UsersTable,
 	}
 )

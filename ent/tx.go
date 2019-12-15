@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// Bengkel is the client for interacting with the Bengkel builders.
+	Bengkel *BengkelClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -29,9 +31,10 @@ func (tx *Tx) Rollback() error {
 // Client returns a Client that binds to current transaction.
 func (tx *Tx) Client() *Client {
 	return &Client{
-		config: tx.config,
-		Schema: migrate.NewSchema(tx.driver),
-		User:   NewUserClient(tx.config),
+		config:  tx.config,
+		Schema:  migrate.NewSchema(tx.driver),
+		Bengkel: NewBengkelClient(tx.config),
+		User:    NewUserClient(tx.config),
 	}
 }
 
@@ -42,7 +45,7 @@ func (tx *Tx) Client() *Client {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: User.QueryXXX(), the query will be executed
+// applies a query, for example: Bengkel.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.
