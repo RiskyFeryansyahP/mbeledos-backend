@@ -1,13 +1,19 @@
 package repository
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/confus1on/mbeledos/ent"
 	"github.com/confus1on/mbeledos/ent/user"
 	_ "github.com/lib/pq"
 
+	"github.com/confus1on/mbeledos/models"
 	"github.com/confus1on/mbeledos/userservice"
 )
 
@@ -46,6 +52,28 @@ func (ur *PostgreSQLUserRepository) Register(ctx context.Context, user *ent.User
 
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (PostgreSQLUserRepository) SendVerification(ctx context.Context, OTP int32, phonenumber string) error {
+	nexmoSMS := models.RequestNexmoSMS{
+		API_KEY:    os.Getenv("API_KEY"),
+		API_SECRET: os.Getenv("API_SECRET"),
+		To:         phonenumber,
+		From:       "Mbeledos",
+		Text:       "Kode Verifikasi Anda : " + strconv.Itoa(int(OTP)),
+	}
+
+	b, err := json.Marshal(nexmoSMS)
+	if err != nil {
+		return fmt.Errorf("something went wrong in verification : %v", err.Error())
+	}
+
+	_, err = http.Post("https://rest.nexmo.com/sms/json", "application/json", bytes.NewBuffer(b))
+	if err != nil {
+		return fmt.Errorf("Error when POST in nexmo : %v", err.Error())
 	}
 
 	return nil
