@@ -5,11 +5,12 @@ import (
 	"log"
 
 	"github.com/buaazp/fasthttprouter"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
 
 	"github.com/confus1on/mbeledos/config"
 	"github.com/confus1on/mbeledos/ent"
-	_ "github.com/lib/pq"
 
 	// route package user
 	handleruser "github.com/confus1on/mbeledos/userservice/handler"
@@ -29,6 +30,11 @@ func Hello(ctx *fasthttp.RequestCtx) {
 var DB *ent.Client
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("did not find the file .env")
+	}
 
 	// initialize router using fasthttprouter
 	router := fasthttprouter.New()
@@ -50,6 +56,7 @@ func main() {
 
 	router.POST("/user/login", user.Login)
 	router.POST("/user/register", user.Register)
+	router.POST("/user/verification", user.SendVerificationCode)
 
 	router.GET("/bengkel/all", bengkelHandler.GetAllDataBengkel)
 	router.GET("/bengkel/kode/:kode_bengkel", bengkelHandler.GetDataBengkel)
