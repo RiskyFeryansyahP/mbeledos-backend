@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"log"
+	"strconv"
 
 	"github.com/confus1on/mbeledos/ent"
 	"github.com/confus1on/mbeledos/userservice"
@@ -45,4 +46,21 @@ func (uh *UserHandler) Register(ctx *fasthttp.RequestCtx) {
 	}
 
 	json.NewEncoder(ctx).Encode(user)
+}
+
+func (uh *UserHandler) SendVerificationCode(ctx *fasthttp.RequestCtx) {
+	var user *ent.User
+
+	json.Unmarshal(ctx.Request.Body(), &user)
+
+	otp, err := uh.UserUsecase.SendOTPVerification(ctx, user.Nohp)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	json.NewEncoder(ctx).Encode(map[string]string{
+		"Message": "Success Send Verification Code",
+		"OTP":     strconv.Itoa(int(otp)),
+	})
 }

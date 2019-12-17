@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/confus1on/mbeledos/ent"
+	"github.com/confus1on/mbeledos/helper"
 	"github.com/confus1on/mbeledos/userservice"
 )
 
@@ -29,4 +30,14 @@ func (uc *UserUsecase) Register(ctx context.Context, user *ent.User) error {
 		return err
 	}
 	return nil
+}
+
+func (uc *UserUsecase) SendOTPVerification(ctx context.Context, phonenumber string) (int32, error) {
+	otp := helper.OTP()
+	err := uc.UserRepository.SendVerification(ctx, otp, phonenumber)
+	if err != nil {
+		return -1, err
+	}
+
+	return otp, nil
 }
