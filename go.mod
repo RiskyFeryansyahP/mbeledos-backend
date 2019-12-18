@@ -7,6 +7,7 @@ require (
 	github.com/facebookincubator/ent v0.0.0-20191204174450-bb051603ac71
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.2.0
