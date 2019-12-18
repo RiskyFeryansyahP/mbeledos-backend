@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/buaazp/fasthttprouter"
+	"github.com/gomodule/redigo/redis"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/valyala/fasthttp"
@@ -28,6 +29,7 @@ func Hello(ctx *fasthttp.RequestCtx) {
 }
 
 var DB *ent.Client
+var ConnRedis redis.Conn
 
 func main() {
 
@@ -38,6 +40,11 @@ func main() {
 
 	// initialize router using fasthttprouter
 	router := fasthttprouter.New()
+
+	// call pool of redis
+	pool := config.NewPool()
+	ConnRedis = pool.Get()
+	defer ConnRedis.Close()
 
 	// call new config database
 	DB = config.New()
