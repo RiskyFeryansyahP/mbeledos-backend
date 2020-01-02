@@ -67,6 +67,7 @@ func main() {
 
 	router.GET("/bengkel/all", bengkelHandler.GetAllDataBengkel)
 	router.GET("/bengkel/kode/:kode_bengkel", bengkelHandler.GetDataBengkel)
+	router.POST("/bengkel/nearest", bengkelHandler.GetNearestDataBengkel)
 
 	log.Println("Server Running on http://127.0.0.1:8080")
 	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
