@@ -42,9 +42,9 @@ func main() {
 	router := fasthttprouter.New()
 
 	// call pool of redis
-	pool := config.NewPool()
-	ConnRedis = pool.Get()
-	defer ConnRedis.Close()
+	// pool := config.NewPool()
+	// ConnRedis = pool.Get()
+	// defer ConnRedis.Close()
 
 	// call new config database
 	DB = config.New()
@@ -68,6 +68,7 @@ func main() {
 	router.GET("/bengkel/all", bengkelHandler.GetAllDataBengkel)
 	router.GET("/bengkel/kode/:kode_bengkel", bengkelHandler.GetDataBengkel)
 	router.POST("/bengkel/nearest", bengkelHandler.GetNearestDataBengkel)
+	router.POST("/bengkel/login", bengkelHandler.LoginBengkel)
 
 	log.Println("Server Running on http://127.0.0.1:8080")
 	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
