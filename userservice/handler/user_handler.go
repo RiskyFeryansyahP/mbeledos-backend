@@ -14,6 +14,10 @@ type UserHandler struct {
 	UserUsecase userservice.Usecase
 }
 
+type Message struct {
+	Status int `json:"status"`
+}
+
 func NewUserHandler(uc userservice.Usecase) *UserHandler {
 	return &UserHandler{UserUsecase: uc}
 }
@@ -63,4 +67,19 @@ func (uh *UserHandler) SendVerificationCode(ctx *fasthttp.RequestCtx) {
 		"Message": "Success Send Verification Code",
 		"OTP":     strconv.Itoa(int(otp)),
 	})
+}
+
+func (uh *UserHandler) UpdateUser(ctx *fasthttp.RequestCtx) {
+	var user ent.User
+
+	body := ctx.Request.Body()
+
+	json.Unmarshal(body, &user)
+
+	err := uh.UserUsecase.UpdateUser(ctx, user)
+	if err != nil {
+		log.Println(err)
+	}
+
+	json.NewEncoder(ctx).Encode(&Message{Status: 200})
 }

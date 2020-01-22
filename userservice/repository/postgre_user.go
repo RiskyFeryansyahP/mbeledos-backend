@@ -78,3 +78,21 @@ func (PostgreSQLUserRepository) SendVerification(ctx context.Context, OTP int32,
 
 	return nil
 }
+
+func (ur *PostgreSQLUserRepository) UpdateUser(ctx context.Context, profile ent.User) error {
+	_, err := ur.DB.User.
+		Update().
+		Where(
+			user.NohpEQ(profile.Nohp),
+		).
+		SetNama(profile.Nama).
+		SetAlamat(profile.Alamat).
+		Save(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}

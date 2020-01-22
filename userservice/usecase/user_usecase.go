@@ -41,3 +41,12 @@ func (uc *UserUsecase) SendOTPVerification(ctx context.Context, phonenumber stri
 
 	return otp, nil
 }
+
+func (uc *UserUsecase) UpdateUser(ctx context.Context, profile ent.User) error {
+
+	err := uc.UserRepository.UpdateUser(ctx, profile)
+	if err != nil {
+		return err
+	}
+	return nil
+}

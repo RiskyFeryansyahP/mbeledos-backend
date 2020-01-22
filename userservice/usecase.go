@@ -10,4 +10,5 @@ type Usecase interface {
 	Login(ctx context.Context, phonenumber string) (*ent.User, error)
 	Register(ctx context.Context, user *ent.User) error
 	SendOTPVerification(ctx context.Context, phonenumber string) (int32, error)
+	UpdateUser(ctx context.Context, profile ent.User) error
 }
