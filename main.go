@@ -82,6 +82,7 @@ func main() {
 	router.POST("/bengkel/login", bengkelHandler.LoginBengkel)
 
 	router.POST("/transaction/insert", transactionHandler.InsertData)
+	router.GET("/transaction/:orderphone", transactionHandler.ShowTransaction)
 
 	log.Println("Server Running on http://127.0.0.1:8080")
 	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
