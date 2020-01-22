@@ -25,3 +25,12 @@ func (tu *TransactionUsecase) InsertTransaction(ctx context.Context, transaction
 
 	return nil
 }
+
+func (tu *TransactionUsecase) SelectCustomerTransaction(ctx context.Context, orderphone string) ([]*ent.Transaction, error) {
+	res, err := tu.RepoTransaction.ShowCustomerTransaction(ctx, orderphone)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

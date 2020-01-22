@@ -36,3 +36,14 @@ func (th *TransactionHanlder) InsertData(ctx *fasthttp.RequestCtx) {
 
 	json.NewEncoder(ctx).Encode(&Message{Status: 200})
 }
+
+func (th *TransactionHanlder) ShowTransaction(ctx *fasthttp.RequestCtx) {
+	orderphone := ctx.UserValue("orderphone").(string)
+
+	res, err := th.TransactionUsecase.SelectCustomerTransaction(ctx, orderphone)
+	if err != nil {
+		log.Println(err)
+	}
+
+	json.NewEncoder(ctx).Encode(res)
+}

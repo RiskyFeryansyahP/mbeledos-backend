@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/confus1on/mbeledos/ent"
+	"github.com/confus1on/mbeledos/ent/transaction"
 	"github.com/confus1on/mbeledos/transactionservice"
 )
 
@@ -28,4 +29,18 @@ func (tr *TransactionRepository) InsertTransaction(ctx context.Context, transact
 	}
 
 	return nil
+}
+
+func (tr *TransactionRepository) ShowCustomerTransaction(ctx context.Context, orderphone string) ([]*ent.Transaction, error) {
+	res, err := tr.DB.Transaction.Query().
+		Where(
+			transaction.OrderphoneEQ(orderphone),
+		).
+		All(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("Error select transaction %+v ", err)
+	}
+
+	return res, nil
 }
