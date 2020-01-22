@@ -21,6 +21,7 @@ type BengkelUpdate struct {
 	addlatitude    *float64
 	longitude      *float64
 	addlongitude   *float64
+	phonenumber    *string
 	predicates     []predicate.Bengkel
 }
 
@@ -87,6 +88,12 @@ func (bu *BengkelUpdate) AddLongitude(f float64) *BengkelUpdate {
 	} else {
 		*bu.addlongitude += f
 	}
+	return bu
+}
+
+// SetPhonenumber sets the phonenumber field.
+func (bu *BengkelUpdate) SetPhonenumber(s string) *BengkelUpdate {
+	bu.phonenumber = &s
 	return bu
 }
 
@@ -184,6 +191,9 @@ func (bu *BengkelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value := bu.addlongitude; value != nil {
 		updater.Add(bengkel.FieldLongitude, *value)
 	}
+	if value := bu.phonenumber; value != nil {
+		updater.Set(bengkel.FieldPhonenumber, *value)
+	}
 	if !updater.Empty() {
 		query, args := updater.Query()
 		if err := tx.Exec(ctx, query, args, &res); err != nil {
@@ -207,6 +217,7 @@ type BengkelUpdateOne struct {
 	addlatitude    *float64
 	longitude      *float64
 	addlongitude   *float64
+	phonenumber    *string
 }
 
 // SetKodeBengkel sets the kode_bengkel field.
@@ -266,6 +277,12 @@ func (buo *BengkelUpdateOne) AddLongitude(f float64) *BengkelUpdateOne {
 	} else {
 		*buo.addlongitude += f
 	}
+	return buo
+}
+
+// SetPhonenumber sets the phonenumber field.
+func (buo *BengkelUpdateOne) SetPhonenumber(s string) *BengkelUpdateOne {
+	buo.phonenumber = &s
 	return buo
 }
 
@@ -372,6 +389,10 @@ func (buo *BengkelUpdateOne) sqlSave(ctx context.Context) (b *Bengkel, err error
 	if value := buo.addlongitude; value != nil {
 		updater.Add(bengkel.FieldLongitude, *value)
 		b.Longitude += *value
+	}
+	if value := buo.phonenumber; value != nil {
+		updater.Set(bengkel.FieldPhonenumber, *value)
+		b.Phonenumber = *value
 	}
 	if !updater.Empty() {
 		query, args := updater.Query()

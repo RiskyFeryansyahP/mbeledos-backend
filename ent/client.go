@@ -10,6 +10,7 @@ import (
 	"github.com/confus1on/mbeledos/ent/migrate"
 
 	"github.com/confus1on/mbeledos/ent/bengkel"
+	"github.com/confus1on/mbeledos/ent/transaction"
 	"github.com/confus1on/mbeledos/ent/user"
 
 	"github.com/facebookincubator/ent/dialect"
@@ -23,6 +24,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// Bengkel is the client for interacting with the Bengkel builders.
 	Bengkel *BengkelClient
+	// Transaction is the client for interacting with the Transaction builders.
+	Transaction *TransactionClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -32,10 +35,11 @@ func NewClient(opts ...Option) *Client {
 	c := config{log: log.Println}
 	c.options(opts...)
 	return &Client{
-		config:  c,
-		Schema:  migrate.NewSchema(c.driver),
-		Bengkel: NewBengkelClient(c),
-		User:    NewUserClient(c),
+		config:      c,
+		Schema:      migrate.NewSchema(c.driver),
+		Bengkel:     NewBengkelClient(c),
+		Transaction: NewTransactionClient(c),
+		User:        NewUserClient(c),
 	}
 }
 
@@ -67,9 +71,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	}
 	cfg := config{driver: tx, log: c.log, debug: c.debug}
 	return &Tx{
-		config:  cfg,
-		Bengkel: NewBengkelClient(cfg),
-		User:    NewUserClient(cfg),
+		config:      cfg,
+		Bengkel:     NewBengkelClient(cfg),
+		Transaction: NewTransactionClient(cfg),
+		User:        NewUserClient(cfg),
 	}, nil
 }
 
@@ -86,10 +91,11 @@ func (c *Client) Debug() *Client {
 	}
 	cfg := config{driver: dialect.Debug(c.driver, c.log), log: c.log, debug: true}
 	return &Client{
-		config:  cfg,
-		Schema:  migrate.NewSchema(cfg.driver),
-		Bengkel: NewBengkelClient(cfg),
-		User:    NewUserClient(cfg),
+		config:      cfg,
+		Schema:      migrate.NewSchema(cfg.driver),
+		Bengkel:     NewBengkelClient(cfg),
+		Transaction: NewTransactionClient(cfg),
+		User:        NewUserClient(cfg),
 	}
 }
 
@@ -160,6 +166,70 @@ func (c *BengkelClient) GetX(ctx context.Context, id int) *Bengkel {
 		panic(err)
 	}
 	return b
+}
+
+// TransactionClient is a client for the Transaction schema.
+type TransactionClient struct {
+	config
+}
+
+// NewTransactionClient returns a client for the Transaction from the given config.
+func NewTransactionClient(c config) *TransactionClient {
+	return &TransactionClient{config: c}
+}
+
+// Create returns a create builder for Transaction.
+func (c *TransactionClient) Create() *TransactionCreate {
+	return &TransactionCreate{config: c.config}
+}
+
+// Update returns an update builder for Transaction.
+func (c *TransactionClient) Update() *TransactionUpdate {
+	return &TransactionUpdate{config: c.config}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TransactionClient) UpdateOne(t *Transaction) *TransactionUpdateOne {
+	return c.UpdateOneID(t.ID)
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TransactionClient) UpdateOneID(id int) *TransactionUpdateOne {
+	return &TransactionUpdateOne{config: c.config, id: id}
+}
+
+// Delete returns a delete builder for Transaction.
+func (c *TransactionClient) Delete() *TransactionDelete {
+	return &TransactionDelete{config: c.config}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *TransactionClient) DeleteOne(t *Transaction) *TransactionDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *TransactionClient) DeleteOneID(id int) *TransactionDeleteOne {
+	return &TransactionDeleteOne{c.Delete().Where(transaction.ID(id))}
+}
+
+// Create returns a query builder for Transaction.
+func (c *TransactionClient) Query() *TransactionQuery {
+	return &TransactionQuery{config: c.config}
+}
+
+// Get returns a Transaction entity by its id.
+func (c *TransactionClient) Get(ctx context.Context, id int) (*Transaction, error) {
+	return c.Query().Where(transaction.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TransactionClient) GetX(ctx context.Context, id int) *Transaction {
+	t, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return t
 }
 
 // UserClient is a client for the User schema.

@@ -24,6 +24,8 @@ type Bengkel struct {
 	Latitude float64 `json:"latitude,omitempty"`
 	// Longitude holds the value of the "longitude" field.
 	Longitude float64 `json:"longitude,omitempty"`
+	// Phonenumber holds the value of the "phonenumber" field.
+	Phonenumber string `json:"phonenumber,omitempty"`
 }
 
 // FromRows scans the sql response data into Bengkel.
@@ -35,6 +37,7 @@ func (b *Bengkel) FromRows(rows *sql.Rows) error {
 		AlamatBengkel sql.NullString
 		Latitude      sql.NullFloat64
 		Longitude     sql.NullFloat64
+		Phonenumber   sql.NullString
 	}
 	// the order here should be the same as in the `bengkel.Columns`.
 	if err := rows.Scan(
@@ -44,6 +47,7 @@ func (b *Bengkel) FromRows(rows *sql.Rows) error {
 		&scanb.AlamatBengkel,
 		&scanb.Latitude,
 		&scanb.Longitude,
+		&scanb.Phonenumber,
 	); err != nil {
 		return err
 	}
@@ -53,6 +57,7 @@ func (b *Bengkel) FromRows(rows *sql.Rows) error {
 	b.AlamatBengkel = scanb.AlamatBengkel.String
 	b.Latitude = scanb.Latitude.Float64
 	b.Longitude = scanb.Longitude.Float64
+	b.Phonenumber = scanb.Phonenumber.String
 	return nil
 }
 
@@ -89,6 +94,8 @@ func (b *Bengkel) String() string {
 	builder.WriteString(fmt.Sprintf("%v", b.Latitude))
 	builder.WriteString(", longitude=")
 	builder.WriteString(fmt.Sprintf("%v", b.Longitude))
+	builder.WriteString(", phonenumber=")
+	builder.WriteString(b.Phonenumber)
 	builder.WriteByte(')')
 	return builder.String()
 }

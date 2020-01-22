@@ -62,6 +62,7 @@ func (bu *BengkelUsecase) GetNearestBengkel(ctx context.Context, latitude, longi
 				AlamatBengkel: result[key].AlamatBengkel,
 				Latitude:      result[key].Latitude,
 				Longitude:     result[key].Longitude,
+				Phonenumber:   result[key].Phonenumber,
 			}
 
 			bengkels = append(bengkels, bengkel)
@@ -69,4 +70,14 @@ func (bu *BengkelUsecase) GetNearestBengkel(ctx context.Context, latitude, longi
 	}
 
 	return bengkels, nil
+}
+
+func (bu *BengkelUsecase) LoginUserBengkel(ctx context.Context, phone string) (*ent.Bengkel, error) {
+	result, err := bu.RepoBengkel.SigninBengkelUser(ctx, phone)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, err
 }

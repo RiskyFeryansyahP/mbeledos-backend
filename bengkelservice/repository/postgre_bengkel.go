@@ -42,3 +42,16 @@ func (br *PostgreSQLBengkelRepository) GetSpecificationBengkel(ctx context.Conte
 
 	return result, nil
 }
+
+func (br *PostgreSQLBengkelRepository) SigninBengkelUser(ctx context.Context, phone string) (*ent.Bengkel, error) {
+	result, err := br.DB.Bengkel.
+		Query().
+		Where(bengkel.PhonenumberEQ(phone)).
+		Only(ctx)
+
+	if err != nil {
+		return nil, fmt.Errorf("Error when login bengkel %v ", err.Error())
+	}
+
+	return result, nil
+}

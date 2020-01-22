@@ -36,8 +36,34 @@ func ExampleBengkel() {
 		SetAlamatBengkel("string").
 		SetLatitude(1).
 		SetLongitude(1).
+		SetPhonenumber("string").
 		SaveX(ctx)
 	log.Println("bengkel created:", b)
+
+	// query edges.
+
+	// Output:
+}
+func ExampleTransaction() {
+	if dsn == "" {
+		return
+	}
+	ctx := context.Background()
+	drv, err := sql.Open("mysql", dsn)
+	if err != nil {
+		log.Fatalf("failed creating database client: %v", err)
+	}
+	defer drv.Close()
+	client := NewClient(Driver(drv))
+	// creating vertices for the transaction's edges.
+
+	// create transaction vertex with its edges.
+	t := client.Transaction.
+		Create().
+		SetOrderphone("string").
+		SetNamabengkel("string").
+		SaveX(ctx)
+	log.Println("transaction created:", t)
 
 	// query edges.
 

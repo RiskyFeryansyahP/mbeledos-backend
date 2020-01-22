@@ -51,3 +51,20 @@ func (bh *BengkelHandler) GetNearestDataBengkel(ctx *fasthttp.RequestCtx) {
 
 	json.NewEncoder(ctx).Encode(result)
 }
+
+func (bh *BengkelHandler) LoginBengkel(ctx *fasthttp.RequestCtx) {
+
+	var bengkel ent.Bengkel
+
+	body := ctx.Request.Body()
+
+	json.Unmarshal(body, &bengkel)
+
+	result, err := bh.BengkelUsecase.LoginUserBengkel(ctx, bengkel.Phonenumber)
+	if err != nil {
+		log.Println(err)
+	}
+
+	json.NewEncoder(ctx).Encode(result)
+
+}

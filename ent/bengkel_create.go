@@ -19,6 +19,7 @@ type BengkelCreate struct {
 	alamat_bengkel *string
 	latitude       *float64
 	longitude      *float64
+	phonenumber    *string
 }
 
 // SetKodeBengkel sets the kode_bengkel field.
@@ -59,6 +60,12 @@ func (bc *BengkelCreate) SetLongitude(f float64) *BengkelCreate {
 	return bc
 }
 
+// SetPhonenumber sets the phonenumber field.
+func (bc *BengkelCreate) SetPhonenumber(s string) *BengkelCreate {
+	bc.phonenumber = &s
+	return bc
+}
+
 // Save creates the Bengkel in the database.
 func (bc *BengkelCreate) Save(ctx context.Context) (*Bengkel, error) {
 	if bc.kode_bengkel == nil {
@@ -82,6 +89,9 @@ func (bc *BengkelCreate) Save(ctx context.Context) (*Bengkel, error) {
 	}
 	if bc.longitude == nil {
 		return nil, errors.New("ent: missing required field \"longitude\"")
+	}
+	if bc.phonenumber == nil {
+		return nil, errors.New("ent: missing required field \"phonenumber\"")
 	}
 	return bc.sqlSave(ctx)
 }
@@ -124,6 +134,10 @@ func (bc *BengkelCreate) sqlSave(ctx context.Context) (*Bengkel, error) {
 	if value := bc.longitude; value != nil {
 		insert.Set(bengkel.FieldLongitude, *value)
 		b.Longitude = *value
+	}
+	if value := bc.phonenumber; value != nil {
+		insert.Set(bengkel.FieldPhonenumber, *value)
+		b.Phonenumber = *value
 	}
 
 	id, err := insertLastID(ctx, tx, insert.Returning(bengkel.FieldID))
