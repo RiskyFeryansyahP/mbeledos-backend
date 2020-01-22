@@ -153,6 +153,15 @@ func Longitude(v float64) predicate.Bengkel {
 	)
 }
 
+// Phonenumber applies equality check predicate on the "phonenumber" field. It's identical to PhonenumberEQ.
+func Phonenumber(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
 // KodeBengkelEQ applies the EQ predicate on the "kode_bengkel" field.
 func KodeBengkelEQ(v string) predicate.Bengkel {
 	return predicate.Bengkel(
@@ -744,6 +753,143 @@ func LongitudeLTE(v float64) predicate.Bengkel {
 	return predicate.Bengkel(
 		func(s *sql.Selector) {
 			s.Where(sql.LTE(s.C(FieldLongitude), v))
+		},
+	)
+}
+
+// PhonenumberEQ applies the EQ predicate on the "phonenumber" field.
+func PhonenumberEQ(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberNEQ applies the NEQ predicate on the "phonenumber" field.
+func PhonenumberNEQ(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.NEQ(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberIn applies the In predicate on the "phonenumber" field.
+func PhonenumberIn(vs ...string) predicate.Bengkel {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.In(s.C(FieldPhonenumber), v...))
+		},
+	)
+}
+
+// PhonenumberNotIn applies the NotIn predicate on the "phonenumber" field.
+func PhonenumberNotIn(vs ...string) predicate.Bengkel {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			// if not arguments were provided, append the FALSE constants,
+			// since we can't apply "IN ()". This will make this predicate falsy.
+			if len(vs) == 0 {
+				s.Where(sql.False())
+				return
+			}
+			s.Where(sql.NotIn(s.C(FieldPhonenumber), v...))
+		},
+	)
+}
+
+// PhonenumberGT applies the GT predicate on the "phonenumber" field.
+func PhonenumberGT(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.GT(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberGTE applies the GTE predicate on the "phonenumber" field.
+func PhonenumberGTE(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.GTE(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberLT applies the LT predicate on the "phonenumber" field.
+func PhonenumberLT(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.LT(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberLTE applies the LTE predicate on the "phonenumber" field.
+func PhonenumberLTE(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.LTE(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberContains applies the Contains predicate on the "phonenumber" field.
+func PhonenumberContains(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.Contains(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberHasPrefix applies the HasPrefix predicate on the "phonenumber" field.
+func PhonenumberHasPrefix(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.HasPrefix(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberHasSuffix applies the HasSuffix predicate on the "phonenumber" field.
+func PhonenumberHasSuffix(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.HasSuffix(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberEqualFold applies the EqualFold predicate on the "phonenumber" field.
+func PhonenumberEqualFold(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.EqualFold(s.C(FieldPhonenumber), v))
+		},
+	)
+}
+
+// PhonenumberContainsFold applies the ContainsFold predicate on the "phonenumber" field.
+func PhonenumberContainsFold(v string) predicate.Bengkel {
+	return predicate.Bengkel(
+		func(s *sql.Selector) {
+			s.Where(sql.ContainsFold(s.C(FieldPhonenumber), v))
 		},
 	)
 }

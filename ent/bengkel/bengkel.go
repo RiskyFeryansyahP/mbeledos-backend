@@ -21,6 +21,8 @@ const (
 	FieldLatitude = "latitude"
 	// FieldLongitude holds the string denoting the longitude vertex property in the database.
 	FieldLongitude = "longitude"
+	// FieldPhonenumber holds the string denoting the phonenumber vertex property in the database.
+	FieldPhonenumber = "phonenumber"
 
 	// Table holds the table name of the bengkel in the database.
 	Table = "bengkels"
@@ -34,6 +36,7 @@ var Columns = []string{
 	FieldAlamatBengkel,
 	FieldLatitude,
 	FieldLongitude,
+	FieldPhonenumber,
 }
 
 var (

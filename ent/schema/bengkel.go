@@ -22,6 +22,7 @@ func (Bengkel) Fields() []ent.Field {
 			NotEmpty(),
 		field.Float("latitude"),
 		field.Float("longitude"),
+		field.String("phonenumber"),
 	}
 }
 

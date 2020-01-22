@@ -19,12 +19,26 @@ var (
 		{Name: "alamat_bengkel", Type: field.TypeString},
 		{Name: "latitude", Type: field.TypeFloat64},
 		{Name: "longitude", Type: field.TypeFloat64},
+		{Name: "phonenumber", Type: field.TypeString},
 	}
 	// BengkelsTable holds the schema information for the "bengkels" table.
 	BengkelsTable = &schema.Table{
 		Name:        "bengkels",
 		Columns:     BengkelsColumns,
 		PrimaryKey:  []*schema.Column{BengkelsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{},
+	}
+	// TransactionsColumns holds the columns for the "transactions" table.
+	TransactionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "orderphone", Type: field.TypeString},
+		{Name: "namabengkel", Type: field.TypeString},
+	}
+	// TransactionsTable holds the schema information for the "transactions" table.
+	TransactionsTable = &schema.Table{
+		Name:        "transactions",
+		Columns:     TransactionsColumns,
+		PrimaryKey:  []*schema.Column{TransactionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{},
 	}
 	// UsersColumns holds the columns for the "users" table.
@@ -48,6 +62,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		BengkelsTable,
+		TransactionsTable,
 		UsersTable,
 	}
 )
