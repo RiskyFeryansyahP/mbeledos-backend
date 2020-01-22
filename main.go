@@ -22,6 +22,11 @@ import (
 	handlerbengkel "github.com/confus1on/mbeledos/bengkelservice/handler"
 	repobengkel "github.com/confus1on/mbeledos/bengkelservice/repository"
 	usecasebengkel "github.com/confus1on/mbeledos/bengkelservice/usecase"
+
+	//route transaction
+	handlerTransaction "github.com/confus1on/mbeledos/transactionservice/handler"
+	repoTransaction "github.com/confus1on/mbeledos/transactionservice/repository"
+	usecaseTransaction "github.com/confus1on/mbeledos/transactionservice/usecase"
 )
 
 func Hello(ctx *fasthttp.RequestCtx) {
@@ -61,14 +66,22 @@ func main() {
 	bengkelUsecase := usecasebengkel.NewBengkelUsecase(postgresqlBengkelRepository)
 	bengkelHandler := handlerbengkel.NewBengkelHandler(bengkelUsecase)
 
+	// transaction route
+	postgresqlTransactionRepository := repoTransaction.NewRepositoryTransaction(DB)
+	transactionUsecase := usecaseTransaction.NewUsecaseTransaction(postgresqlTransactionRepository)
+	transactionHandler := handlerTransaction.NewTransactionHandler(transactionUsecase)
+
 	router.POST("/user/login", user.Login)
 	router.POST("/user/register", user.Register)
 	router.POST("/user/verification", user.SendVerificationCode)
+	router.POST("/user/update/", user.UpdateUser)
 
 	router.GET("/bengkel/all", bengkelHandler.GetAllDataBengkel)
 	router.GET("/bengkel/kode/:kode_bengkel", bengkelHandler.GetDataBengkel)
 	router.POST("/bengkel/nearest", bengkelHandler.GetNearestDataBengkel)
 	router.POST("/bengkel/login", bengkelHandler.LoginBengkel)
+
+	router.POST("/transaction/insert", transactionHandler.InsertData)
 
 	log.Println("Server Running on http://127.0.0.1:8080")
 	log.Fatal(fasthttp.ListenAndServe(":8080", router.Handler))
