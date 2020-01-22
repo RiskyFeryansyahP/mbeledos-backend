@@ -14,6 +14,8 @@ type Tx struct {
 	config
 	// Bengkel is the client for interacting with the Bengkel builders.
 	Bengkel *BengkelClient
+	// Transaction is the client for interacting with the Transaction builders.
+	Transaction *TransactionClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -31,10 +33,11 @@ func (tx *Tx) Rollback() error {
 // Client returns a Client that binds to current transaction.
 func (tx *Tx) Client() *Client {
 	return &Client{
-		config:  tx.config,
-		Schema:  migrate.NewSchema(tx.driver),
-		Bengkel: NewBengkelClient(tx.config),
-		User:    NewUserClient(tx.config),
+		config:      tx.config,
+		Schema:      migrate.NewSchema(tx.driver),
+		Bengkel:     NewBengkelClient(tx.config),
+		Transaction: NewTransactionClient(tx.config),
+		User:        NewUserClient(tx.config),
 	}
 }
 
